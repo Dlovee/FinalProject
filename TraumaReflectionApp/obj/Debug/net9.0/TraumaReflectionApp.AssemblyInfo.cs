@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TraumaReflectionApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80f6f3c8d033b72b826bb60c83498f6df16fff63")]
 [assembly: System.Reflection.AssemblyProductAttribute("TraumaReflectionApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TraumaReflectionApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
