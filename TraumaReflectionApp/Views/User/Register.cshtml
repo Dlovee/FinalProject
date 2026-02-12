@@ -1,0 +1,131 @@
+@model TraumaReflectionApp.Models.User
+
+<style>
+    html {
+        overscroll-behavior: none;
+        background-color: #ffb07a; /* fallback */
+    }
+
+    body {
+        background: linear-gradient(
+            135deg,
+            #ffe8d6 0%,
+            #ffc8a3 33%,
+            #ffb07a 66%,
+            #ff9f5a 100%
+        );
+        min-height: 100vh;
+    }
+    
+    /* Optional: calming background image */
+    /* 
+    body {
+        background: url('/images/calm-bg.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+    */
+</style>
+
+<style>
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const elements = document.querySelectorAll(".fade-in");
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                }
+            });
+        });
+
+        elements.forEach(el => observer.observe(el));
+    });
+</script>
+
+<div class="container mt-5">
+
+    <!-- Intro Section -->
+    <div class="text-center mb-5 fade-in" style="max-width: 700px; margin: 0 auto;">
+        <h1 class="fw-bold mb-3">Welcome to a Space Made for You</h1>
+
+        <p class="lead text-muted">
+            This is a quiet place for people carrying experiences that are hard to talk about,
+            easy to minimize, or difficult to share. Here, your reflections matter — not because
+            they’re polished, but because they’re honest.
+        </p>
+
+        <p class="text-muted">
+            You can write privately, reflect at your own pace, and — only if you choose —
+            share your thoughts with others who understand. Nothing is required of you yet.
+        </p>
+
+        <p class="text-muted">
+            When you're ready to begin, scroll down.
+        </p>
+    </div>
+
+
+    <!-- Spacer to push the form below the fold -->
+    <div class="fade-in" style="height: 200px;"></div>
+
+    <!-- Create Account Section -->
+    <div class="d-flex justify-content-center fade-in">
+        <div class="card shadow-sm" style="max-width: 500px; background-color: #bfbfbf;">
+            <div class="card-body">
+
+                <h2 class="text-center mb-3">Create an Account</h2>
+                <p class="text-muted text-center mb-4">
+                    A calm space to start your reflection journey
+                </p>
+
+                <form asp-action="Register" method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Username</label>
+                        <input asp-for="Username" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Password</label>
+                        <input asp-for="PasswordHash" type="password" class="form-control" />
+                        <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        Register
+                    </button>
+
+                </form>
+
+                <div class="text-center">
+                    <small class="text-muted">
+                        Already have an account?
+                        <a asp-controller="User" asp-action="Login">Login</a>
+                    </small>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

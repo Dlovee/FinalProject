@@ -1,0 +1,91 @@
+﻿@model TraumaReflectionApp.Models.ViewModels.HomeViewModel
+
+<div class="container mt-5" style="max-width: 700px;">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-semibold">Welcome back, @Model.Username</h2>
+        <p class="text-muted">Here’s a gentle snapshot of where you left off</p>
+    </div>
+
+    @if (Model.RecentReflections != null && Model.RecentReflections.Any())
+    {
+        <h4 class="mb-3">Recent Reflections</h4>
+
+        <div class="list-group mb-5">
+            @foreach (var r in Model.RecentReflections)
+            {
+                <a asp-controller="Reflection"
+                   asp-action="Details"
+                   asp-route-id="@r.ReflectionID"
+                   class="list-group-item list-group-item-action">
+
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="fw-semibold">
+                                @(!string.IsNullOrEmpty(r.PreviewText) ? r.PreviewText : "(No content)")
+                            </div>
+                            <small class="text-muted">
+                                @r.CreatedAt.ToString("MMMM dd, yyyy")
+                            </small>
+                        </div>
+
+                        @if (r.IsPublic)
+                        {
+                            <span class="badge bg-success align-self-start">Public</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary align-self-start">Private</span>
+                        }
+                    </div>
+
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center text-muted mb-5">
+            <p>You haven’t written anything recently.</p>
+            <p>Your space is here whenever you’re ready.</p>
+        </div>
+    }
+
+    <div class="text-center">
+        <a asp-controller="Reflection"
+           asp-action="Index"
+           class="btn btn-primary me-2">
+            View All Reflections
+        </a>
+
+        <a asp-controller="Reflection"
+           asp-action="Create"
+           class="btn btn-outline-secondary">
+            Create New Reflection
+        </a>
+        
+        <a asp-controller="Reflection" asp-action="Forum"
+           class="btn btn-outline-dark">
+             Visit the Public Forum
+        </a>
+    </div>
+
+</div>
+<style>
+    /* Change background of reflection previews on Welcome page */
+    .list-group-item {
+        background-color: #bfbfbf !important;
+        border: none !important;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        padding: 16px 20px;
+    }
+
+    /* Optional: hover effect */
+    .list-group-item-action:hover {
+        background-color: #a9a9a9 !important;
+        transform: translateY(-2px);
+        transition: 0.15s ease;
+    }
+</style>
+

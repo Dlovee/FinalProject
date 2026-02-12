@@ -1,0 +1,57 @@
+@model TraumaReflectionApp.Models.Reflection
+
+<div class="container mt-5" style="max-width: 700px;">
+
+    <div class="card shadow-sm border-0 p-4" style="background-color: #bfbfbf;">
+        
+        <h2 class="fw-semibold mb-4">Write a Reflection</h2>
+
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <label asp-for="Content"></label>
+                <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <label asp-for="CategoryID"></label>
+                <input asp-for="CategoryID" class="form-control" />
+            </div>
+
+            <div class="d-flex gap-3 mt-4">
+                <button type="submit" class="btn btn-outline-secondary">
+                    Save Reflection
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Back
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<style>
+    .form-control {
+        background-color: #e0e0e0 !important; /* softer gray so text is readable */
+        border: 1px solid #999 !important;
+        color: #000 !important;
+    }
+
+    .form-control:focus {
+        background-color: #d6d6d6 !important;
+        border-color: #666 !important;
+        box-shadow: none !important;
+    }
+</style>

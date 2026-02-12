@@ -1,0 +1,62 @@
+@model TraumaReflectionApp.Models.Reflection
+@using TraumaReflectionApp.Models.ViewModels
+
+<div class="container mt-4 fade-in">
+
+    <h2>@Model.Title</h2>
+    <p class="text-muted">@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+
+    <div class="reflection-content mb-4">
+        @Model.Content
+    </div>
+
+    <hr />
+
+    <h4>Replies</h4>
+
+    @if (ViewBag.Replies != null)
+    {
+        foreach (var reply in ViewBag.Replies)
+        {
+            <div class="reply-box mb-3 fade-in-slow">
+                <p>@reply.Content</p>
+                <span class="text-muted small">@reply.CreatedAt.ToString("MMMM dd, yyyy hh:mm tt")</span>
+            </div>
+        }
+    }
+
+    <hr />
+
+    @{
+        var currentUserId = Context.Session.GetInt32("UserID");
+        var authorId = Model.UserID; // The reflection author's ID
+    }
+
+    @if (currentUserId != null && currentUserId != authorId)
+    {
+        <form asp-action="CreateReply" method="post" class="mt-3">
+            <input type="hidden" name="ReflectionID" value="@Model.ReflectionID" />
+
+            <textarea name="Content"
+                  maxlength="1000"
+                  class="form-control"
+                  placeholder="Share support, not solutions."
+                  rows="4"></textarea>
+
+            <button type="submit" class="btn btn-primary mt-2">Reply</button>
+        </form>
+    }
+    else if (currentUserId == null)
+    {
+        <div class="text-center mt-3">
+            <p class="text-muted">To respond with care, please sign in or create an account.</p>
+            <a class="btn btn-outline-primary" asp-controller="User" asp-action="Login">Sign In</a>
+            <a class="btn btn-primary ms-2" asp-controller="User" asp-action="Register">Create Account</a>
+        </div>
+    }
+    else
+    {
+        <!-- Author sees nothing. No reply box. -->
+    }
+    <p>currentUserId = @currentUserId, authorId = @authorId</p>
+</div>

@@ -1,0 +1,88 @@
+@model TraumaReflectionApp.Models.Reflection
+
+<div class="container mt-5" style="max-width: 700px;">
+
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h2 class="fw-semibold">Your Reflection</h2>
+        <p class="text-muted">@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+
+        @if (Model.IsPublic)
+        {
+            <span class="badge bg-success">Public</span>
+        }
+        else
+        {
+            <span class="badge bg-secondary">Private</span>
+        }
+    </div>
+
+    <!-- Reflection Content Card -->
+    <div class="card shadow-sm border-0 p-4 mb-4" style="background-color: #bfbfbf;">
+        <p class="mb-0" style="white-space: pre-wrap;">
+            @Model.Content
+        </p>
+    </div>
+
+    <!-- Acknowledgments -->
+    <div class="mt-4">
+        <h5 class="fw-semibold">People responded:</h5>
+
+        @if (ViewBag.AckCounts == null || ViewBag.AckCounts.Count == 0)
+        {
+            <p class="text-muted">No one has responded yet.</p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var ack in ViewBag.AckCounts)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@ack.Key</span>
+                        <span class="badge bg-dark">@ack.Value</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <!-- Actions -->
+    <div class="text-center mt-4">
+
+        @if (!Model.IsPublic)
+        {
+            <form asp-action="Share" asp-route-id="@Model.ReflectionID" method="post" class="d-inline">
+                <button class="btn btn-outline-secondary">Share Publicly</button>
+            </form>
+        }
+        else
+        {
+            <form asp-action="Unshare" asp-route-id="@Model.ReflectionID" method="post" class="d-inline">
+                <button class="btn btn-secondary">Unshare</button>
+            </form>
+        }
+
+        <a asp-action="Index" class="btn btn-outline-secondary ms-2">
+            Back to My Reflections
+        </a>
+        @if (Model.UserID == Context.Session.GetInt32("UserID"))
+        {
+            <a asp-action="Edit"
+               asp-route-id="@Model.ReflectionID"
+               class="btn btn-outline-secondary me-2">
+                Edit Reflection
+            </a>
+        }
+
+    </div>
+
+</div>
+
+<style>
+    .list-group-item {
+        background-color: #bfbfbf;
+        border: none;
+        border-radius: 6px;
+        margin-bottom: 6px;
+    }
+</style>

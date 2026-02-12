@@ -1,0 +1,73 @@
+@model IEnumerable<TraumaReflectionApp.Models.Reflection>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-semibold">My Reflections</h2>
+    
+    <a asp-action="Create"
+       class="btn btn-primary">
+        Write a Reflection
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center text-muted mt-5">
+        <h5>You haven’t written any reflections yet.</h5>
+        <p>Your thoughts will live here when you're ready.</p>
+        <a asp-action="Create" class="btn btn-outline-primary mt-3">
+            Start Your First Reflection
+        </a>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var reflection in Model)
+        {
+            <div class="col-12">
+                <a asp-action="Details"
+                   asp-route-id="@reflection.ReflectionID"
+                   class="text-decoration-none text-dark">
+                    <a asp-controller="Reflection"
+                       asp-action="ViewReflection"
+                       asp-route-id="@reflection.ReflectionID">
+                        View Reflection
+                    </a>
+
+
+                    <!-- ⭐ THIS is the card that is currently white -->
+                    <div class="card shadow-sm border-0 hover-card">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">
+                                    @reflection.CreatedAt.ToString("MMMM dd, yyyy")
+                                </small>
+
+                                @if (reflection.IsPublic)
+                                {
+                                    <span class="badge bg-success">Public</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Private</span>
+                                }
+                            </div>
+
+                            <p class="mt-2 mb-0">
+                                @(
+                                reflection.Content.Length > 120
+                                    ? reflection.Content.Substring(0, 120) + "..."
+                                    : reflection.Content
+                                )
+                            </p>
+
+                        </div>
+                    </div>
+                    <!-- END CARD -->
+
+                </a>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,63 @@
+@model TraumaReflectionApp.Models.Reflection
+
+<h2>Edit Reflection</h2>
+
+@if (Model.IsPublic)
+{
+    <p class="text-muted small mb-4">
+        This reflection is currently visible in the community forum.
+        <a asp-action="Forum" asp-controller="Reflection">
+            View forum
+        </a>
+    </p>
+}
+else
+{
+    <form asp-action="Share"
+          asp-route-id="@Model.ReflectionID"
+          method="post"
+          class="mb-4">
+        <button type="submit"
+                class="btn btn-sm btn-outline-secondary">
+            Share to community forum
+        </button>
+    </form>
+}
+
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ReflectionID" />
+    <input type="hidden" asp-for="CategoryID" />
+
+
+    <div class="mb-3">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Content"></label>
+        <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Save Changes
+    </button>
+
+    <a asp-action="Index" class="btn btn-link">
+        Cancel
+    </a>
+</form>
+<style>
+    .form-control {
+        background-color: #bfbfbf !important;
+        border: 1px solid #999 !important;
+        color: #000 !important;
+    }
+
+    .form-control:focus {
+        background-color: #d6d6d6 !important;
+        border-color: #666 !important;
+        box-shadow: none !important;
+    }
+</style>

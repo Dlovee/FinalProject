@@ -1,0 +1,170 @@
+@model IEnumerable<TraumaReflectionApp.Models.Reflection>
+
+@using Microsoft.AspNetCore.Http
+@{
+    var userId = Context.Session.GetInt32("UserID");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-semibold">Public Forum</h2>
+
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        Back to My Reflections
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center text-muted mt-5">
+        <h5>No public reflections yet.</h5>
+        <p>This space will fill with shared experiences when people feel ready.</p>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var reflection in Model)
+        {
+            var rid = reflection.ReflectionID;
+
+            <div class="col-12">
+                <a asp-action="ViewReflection"
+                   asp-route-id="@rid"
+                   class="text-decoration-none text-dark">
+
+                    <div class="card shadow-sm border-0 hover-card">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">
+                                    @reflection.CreatedAt.ToString("MMMM dd, yyyy")
+                                </small>
+
+                                <span class="badge bg-success">Public</span>
+                            </div>
+
+                            <p class="mt-2 mb-3">
+                                @(
+                                    reflection.Content.Length > 160
+                                    ? reflection.Content.Substring(0, 160) + "..."
+                                    : reflection.Content
+                                )
+                            </p>
+
+                            <div class="d-flex gap-3 align-items-center mt-3">
+
+                                <!-- ❤️ LOVE -->
+                                @{
+                                    var loveCount = 
+                                        ViewBag.AckCounts != null &&
+                                        ViewBag.AckCounts.ContainsKey(rid) &&
+                                        ViewBag.AckCounts[rid].ContainsKey("Love")
+                                            ? ViewBag.AckCounts[rid]["Love"]
+                                            : 0;
+
+                                    var userLoved =
+                                        ViewBag.UserAckStatus != null &&
+                                        ViewBag.UserAckStatus.ContainsKey(rid) &&
+                                        ViewBag.UserAckStatus[rid].Contains("Love");
+                                }
+
+                                @if (userLoved)
+                                {
+                                    <span class="text-muted fst-italic small">You acknowledged this</span>
+                                }
+                                else
+                                {
+                                    <form asp-action="Acknowledge" method="post" class="m-0 p-0">
+                                        <input type="hidden" name="reflectionId" value="@rid" />
+                                        <input type="hidden" name="type" value="Love" />
+                                        <button class="btn btn-sm btn-light">
+                                            ❤️ @loveCount
+                                        </button>
+                                    </form>
+                                }
+
+                                <!-- 🤝 SUPPORT -->
+                                @{
+                                    var supportCount =
+                                        ViewBag.AckCounts != null &&
+                                        ViewBag.AckCounts.ContainsKey(rid) &&
+                                        ViewBag.AckCounts[rid].ContainsKey("Support")
+                                            ? ViewBag.AckCounts[rid]["Support"]
+                                            : 0;
+
+                                    var userSupported =
+                                        ViewBag.UserAckStatus != null &&
+                                        ViewBag.UserAckStatus.ContainsKey(rid) &&
+                                        ViewBag.UserAckStatus[rid].Contains("Support");
+                                }
+
+                                @if (userSupported)
+                                {
+                                    <span class="text-muted fst-italic small">You acknowledged this</span>
+                                }
+                                else
+                                {
+                                    <form asp-action="Acknowledge" method="post" class="m-0 p-0">
+                                        <input type="hidden" name="reflectionId" value="@rid" />
+                                        <input type="hidden" name="type" value="Support" />
+                                        <button class="btn btn-sm btn-light">
+                                            🤝 @supportCount
+                                        </button>
+                                    </form>
+                                }
+
+                                <!-- 🙏 EMPATHY -->
+                                @{
+                                    var empathyCount =
+                                        ViewBag.AckCounts != null &&
+                                        ViewBag.AckCounts.ContainsKey(rid) &&
+                                        ViewBag.AckCounts[rid].ContainsKey("Empathy")
+                                            ? ViewBag.AckCounts[rid]["Empathy"]
+                                            : 0;
+
+                                    var userEmpathy =
+                                        ViewBag.UserAckStatus != null &&
+                                        ViewBag.UserAckStatus.ContainsKey(rid) &&
+                                        ViewBag.UserAckStatus[rid].Contains("Empathy");
+                                }
+
+                                @if (userEmpathy)
+                                {
+                                    <span class="text-muted fst-italic small">You acknowledged this</span>
+                                }
+                                else
+                                {
+                                    <form asp-action="Acknowledge" method="post" class="m-0 p-0">
+                                        <input type="hidden" name="reflectionId" value="@rid" />
+                                        <input type="hidden" name="type" value="Empathy" />
+                                        <button class="btn btn-sm btn-light">
+                                            🙏 @empathyCount
+                                        </button>
+                                    </form>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                </a>
+            </div>
+        }
+    </div>
+}
+
+<style>
+    .hover-card {
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    /* ⭐ CHANGE REFLECTION CARD BACKGROUND COLOR HERE */
+    .card {
+        background-color: #bfbfbf !important;   /* ← change this to whatever color you want */
+    }
+</style>
